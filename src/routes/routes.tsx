@@ -100,13 +100,13 @@ const routes = [
     element: <Employees />,
     isSublink: false,
   },
-  {
-    name: "Sensors",
-    icon: <Component />,
-    path: "sensors",
-    element: <Sensors />,
-    isSublink: false,
-  },
+  // {
+  //   name: "Sensors",
+  //   icon: <Component />,
+  //   path: "sensors",
+  //   element: <Sensors />,
+  //   isSublink: false,
+  // },
   {
     name: "User Roles",
     icon: <TbLockAccess />,

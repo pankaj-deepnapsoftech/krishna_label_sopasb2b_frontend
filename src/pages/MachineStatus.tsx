@@ -189,14 +189,16 @@ const MachineStatus: React.FC = () => {
           </Box>
           <HStack spacing={3}>
             <HStack spacing={2}>
-              <Text fontSize="sm" color="gray.600">Auto Refresh:</Text>
-              <Badge 
-                colorScheme={autoRefresh ? 'green' : 'gray'} 
+              <Text fontSize="sm" color="gray.600">
+                Auto Refresh:
+              </Text>
+              <Badge
+                colorScheme={autoRefresh ? "green" : "gray"}
                 variant="subtle"
                 cursor="pointer"
                 onClick={() => setAutoRefresh(!autoRefresh)}
               >
-                {autoRefresh ? 'ON' : 'OFF'}
+                {autoRefresh ? "ON" : "OFF"}
               </Badge>
             </HStack>
             <Select
@@ -227,125 +229,329 @@ const MachineStatus: React.FC = () => {
         </Flex>
 
         {/* Statistics Cards */}
-        <HStack spacing={6} wrap="wrap">
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, blue.50, white)" borderColor="blue.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+        {/* <HStack spacing={6} wrap="wrap">
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, blue.50, white)"
+            borderColor="blue.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Total Production</StatLabel>
                 <StatNumber color="blue.600">
-                  {isLoading ? '...' : (apiSummaryData?.total_production?.toLocaleString() || '0')}
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.total_production?.toLocaleString() || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="increase" />
-                  {isLoading ? 'Loading...' : 'All Records'}
+                  {isLoading ? "Loading..." : "All Records"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, green.50, white)" borderColor="green.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, green.50, white)"
+            borderColor="green.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Avg Efficiency</StatLabel>
                 <StatNumber color="green.600">
-                  {isLoading ? '...' : (apiSummaryData?.avg_efficiency ? parseFloat(apiSummaryData.avg_efficiency).toFixed(2) : '0')}
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.avg_efficiency
+                    ? parseFloat(apiSummaryData.avg_efficiency).toFixed(2)
+                    : "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="increase" />
-                  {isLoading ? 'Loading...' : 'Overall Average'}
+                  {isLoading ? "Loading..." : "Overall Average"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, red.50, white)" borderColor="red.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, red.50, white)"
+            borderColor="red.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Total Errors</StatLabel>
                 <StatNumber color="red.600">
-                  {isLoading ? '...' : (apiSummaryData?.total_errors || '0')}
+                  {isLoading ? "..." : apiSummaryData?.total_errors || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="decrease" />
-                  {isLoading ? 'Loading...' : 'Error1 + Error2'}
+                  {isLoading ? "Loading..." : "Error1 + Error2"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, purple.50, white)" borderColor="purple.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, purple.50, white)"
+            borderColor="purple.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Status Changes</StatLabel>
                 <StatNumber color="purple.600">
-                  {isLoading ? '...' : (apiSummaryData?.status_summary?.total_status_changes || '0')}
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.status_summary?.total_status_changes ||
+                      "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="increase" />
-                  {isLoading ? 'Loading...' : 'Timeline Events'}
+                  {isLoading ? "Loading..." : "Timeline Events"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-        </HStack>
+        </HStack> */}
 
         {/* Additional Statistics Row */}
-        <HStack spacing={6} wrap="wrap" mt={4}>
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, orange.50, white)" borderColor="orange.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+        {/* <HStack spacing={6} wrap="wrap" mt={4}>
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, orange.50, white)"
+            borderColor="orange.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Error 1 Count</StatLabel>
                 <StatNumber color="orange.600">
-                  {isLoading ? '...' : (apiSummaryData?.error1_count || '0')}
+                  {isLoading ? "..." : apiSummaryData?.error1_count || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="decrease" />
-                  {isLoading ? 'Loading...' : 'Type 1 Errors'}
+                  {isLoading ? "Loading..." : "Type 1 Errors"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, red.50, white)" borderColor="red.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, red.50, white)"
+            borderColor="red.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">Error 2 Count</StatLabel>
                 <StatNumber color="red.600">
-                  {isLoading ? '...' : (apiSummaryData?.error2_count || '0')}
+                  {isLoading ? "..." : apiSummaryData?.error2_count || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="decrease" />
-                  {isLoading ? 'Loading...' : 'Type 2 Errors'}
+                  {isLoading ? "Loading..." : "Type 2 Errors"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, green.50, white)" borderColor="green.100" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, green.50, white)"
+            borderColor="green.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">ON Cycles</StatLabel>
                 <StatNumber color="green.600">
-                  {isLoading ? '...' : (apiSummaryData?.status_summary?.total_on_cycles || '0')}
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.status_summary?.total_on_cycles || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="increase" />
-                  {isLoading ? 'Loading...' : 'Active Cycles'}
+                  {isLoading ? "Loading..." : "Active Cycles"}
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
-          
-          <Card flex="1" minW="200px" bgGradient="linear(to-br, gray.50, white)" borderColor="gray.200" variant="outline" rounded="lg" boxShadow="sm" _hover={{ transform: 'translateY(-4px)', boxShadow: 'lg' }} transition="all 0.2s ease-in-out">
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, gray.50, white)"
+            borderColor="gray.200"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
             <CardBody>
               <Stat>
                 <StatLabel color="gray.600">OFF Cycles</StatLabel>
                 <StatNumber color="gray.600">
-                  {isLoading ? '...' : (apiSummaryData?.status_summary?.total_off_cycles || '0')}
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.status_summary?.total_off_cycles || "0"}
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type="decrease" />
-                  {isLoading ? 'Loading...' : 'Inactive Cycles'}
+                  {isLoading ? "Loading..." : "Inactive Cycles"}
+                </StatHelpText>
+              </Stat>
+            </CardBody>
+          </Card>
+        </HStack> */}
+
+        <HStack spacing={6} wrap="wrap">
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, blue.50, white)"
+            borderColor="blue.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
+            <CardBody>
+              <Stat>
+                <StatLabel color="gray.600">Total Machine</StatLabel>
+                <StatNumber color="blue.600">
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.total_production?.toLocaleString() || "0"}
+                </StatNumber>
+                <StatHelpText>
+                  <StatArrow type="increase" />
+                  {isLoading ? "Loading..." : "All Records"}
+                </StatHelpText>
+              </Stat>
+            </CardBody>
+          </Card>
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, green.50, white)"
+            borderColor="green.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
+            <CardBody>
+              <Stat>
+                <StatLabel color="gray.600">Running Machine</StatLabel>
+                <StatNumber color="green.600">
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.avg_efficiency
+                    ? parseFloat(apiSummaryData.avg_efficiency).toFixed(2)
+                    : "0"}
+                </StatNumber>
+                <StatHelpText>
+                  <StatArrow type="increase" />
+                  {isLoading ? "Loading..." : "Overall Average"}
+                </StatHelpText>
+              </Stat>
+            </CardBody>
+          </Card>
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, red.50, white)"
+            borderColor="red.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
+            <CardBody>
+              <Stat>
+                <StatLabel color="gray.600">Stopped Machine</StatLabel>
+                <StatNumber color="red.600">
+                  {isLoading ? "..." : apiSummaryData?.total_errors || "0"}
+                </StatNumber>
+                <StatHelpText>
+                  <StatArrow type="decrease" />
+                  {isLoading ? "Loading..." : "Error1 + Error2"}
+                </StatHelpText>
+              </Stat>
+            </CardBody>
+          </Card>
+
+          <Card
+            flex="1"
+            minW="200px"
+            bgGradient="linear(to-br, purple.50, white)"
+            borderColor="purple.100"
+            variant="outline"
+            rounded="lg"
+            boxShadow="sm"
+            _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
+            transition="all 0.2s ease-in-out"
+          >
+            <CardBody>
+              <Stat>
+                <StatLabel color="gray.600">Errors in Machine</StatLabel>
+                <StatNumber color="purple.600">
+                  {isLoading
+                    ? "..."
+                    : apiSummaryData?.status_summary?.total_status_changes ||
+                      "0"}
+                </StatNumber>
+                <StatHelpText>
+                  <StatArrow type="increase" />
+                  {isLoading ? "Loading..." : "Timeline Events"}
                 </StatHelpText>
               </Stat>
             </CardBody>
@@ -368,11 +574,13 @@ const MachineStatus: React.FC = () => {
                 >
                   <option value="all">All Devices</option>
                   {availableDevices.map((device: string) => (
-                    <option key={device} value={device}>{device}</option>
+                    <option key={device} value={device}>
+                      {device}
+                    </option>
                   ))}
                 </Select>
               </Box>
-              
+
               <Box>
                 <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                   Shift
@@ -385,11 +593,13 @@ const MachineStatus: React.FC = () => {
                 >
                   <option value="all">All Shifts</option>
                   {shifts.map((shift: string) => (
-                    <option key={shift} value={shift}>{shift}</option>
+                    <option key={shift} value={shift}>
+                      {shift}
+                    </option>
                   ))}
                 </Select>
               </Box>
-              
+
               <Box>
                 <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                   Design
@@ -402,11 +612,13 @@ const MachineStatus: React.FC = () => {
                 >
                   <option value="all">All Designs</option>
                   {designs.map((design: string) => (
-                    <option key={design} value={design}>{design}</option>
+                    <option key={design} value={design}>
+                      {design}
+                    </option>
                   ))}
                 </Select>
               </Box>
-              
+
               <Box>
                 <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                   Status
@@ -422,7 +634,7 @@ const MachineStatus: React.FC = () => {
                   <option value="OFF">OFF</option>
                 </Select>
               </Box>
-              
+
               {/* <Box>
                 <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                   Time Range
@@ -448,38 +660,44 @@ const MachineStatus: React.FC = () => {
           {/* Count Chart */}
           <Card flex="2">
             <CardBody>
-              <Heading size="md" mb={4}>Count Over Time</Heading>
+              <Heading size="md" mb={4}>
+                Count Over Time
+              </Heading>
               <Box height="300px">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                    <XAxis 
-                      dataKey="time" 
+                    <XAxis
+                      dataKey="time"
                       stroke="#718096"
                       fontSize={12}
                       angle={-45}
                       textAnchor="end"
                       height={80}
                     />
-                    <YAxis 
+                    <YAxis
                       stroke="#718096"
                       fontSize={12}
-                      label={{ value: 'Count', angle: -90, position: 'insideLeft' }}
+                      label={{
+                        value: "Count",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        border: '1px solid #E2E8F0',
-                        borderRadius: '8px'
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "white",
+                        border: "1px solid #E2E8F0",
+                        borderRadius: "8px",
                       }}
                     />
                     <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="count" 
-                      stroke="#3182CE" 
+                    <Line
+                      type="monotone"
+                      dataKey="count"
+                      stroke="#3182CE"
                       strokeWidth={2}
-                      dot={{ fill: '#3182CE', strokeWidth: 2, r: 4 }}
+                      dot={{ fill: "#3182CE", strokeWidth: 2, r: 4 }}
                       name="Count"
                     />
                   </LineChart>
@@ -491,7 +709,9 @@ const MachineStatus: React.FC = () => {
           {/* Efficiency Chart */}
           <Card flex="1">
             <CardBody>
-              <Heading size="md" mb={4}>Efficiency vs Errors</Heading>
+              <Heading size="md" mb={4}>
+                Efficiency vs Errors
+              </Heading>
               <Box height="300px">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
@@ -500,7 +720,11 @@ const MachineStatus: React.FC = () => {
                     <YAxis stroke="#718096" fontSize={12} />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="efficiency" fill="#38A169" name="Efficiency" />
+                    <Bar
+                      dataKey="efficiency"
+                      fill="#38A169"
+                      name="Efficiency"
+                    />
                     <Bar dataKey="errors" fill="#E53E3E" name="Errors" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -512,32 +736,71 @@ const MachineStatus: React.FC = () => {
         {/* Machine Performance Data Cards */}
         <Card>
           <CardBody>
-            <Heading size="md" mb={4}>Machine Performance Data</Heading>
+            <Heading size="md" mb={4}>
+              Machine Performance Data
+            </Heading>
             {isLoading ? (
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
                 {[1, 2, 3].map((i) => (
                   <Card key={i} variant="outline" size="sm">
                     <CardBody p={4}>
                       <Box>
-                        <Text fontSize="lg" fontWeight="bold" color="gray.300" mb={3}>
+                        <Text
+                          fontSize="lg"
+                          fontWeight="bold"
+                          color="gray.300"
+                          mb={3}
+                        >
                           Loading...
                         </Text>
                         <Box mb={3}>
-                          <Text fontSize="xs" color="gray.300" mb={1}>Timestamp</Text>
-                          <Text fontSize="sm" fontWeight="medium" color="gray.300">Loading...</Text>
+                          <Text fontSize="xs" color="gray.300" mb={1}>
+                            Timestamp
+                          </Text>
+                          <Text
+                            fontSize="sm"
+                            fontWeight="medium"
+                            color="gray.300"
+                          >
+                            Loading...
+                          </Text>
                         </Box>
                         <Box mb={3}>
-                          <Text fontSize="xs" color="gray.300" mb={1}>Design</Text>
-                          <Text fontSize="sm" fontWeight="medium" color="gray.300">Loading...</Text>
+                          <Text fontSize="xs" color="gray.300" mb={1}>
+                            Design
+                          </Text>
+                          <Text
+                            fontSize="sm"
+                            fontWeight="medium"
+                            color="gray.300"
+                          >
+                            Loading...
+                          </Text>
                         </Box>
                         <SimpleGrid columns={2} spacing={3} mb={3}>
                           <Box>
-                            <Text fontSize="xs" color="gray.300" mb={1}>Duration</Text>
-                            <Text fontSize="lg" fontWeight="bold" color="gray.300">Loading...</Text>
+                            <Text fontSize="xs" color="gray.300" mb={1}>
+                              Duration
+                            </Text>
+                            <Text
+                              fontSize="lg"
+                              fontWeight="bold"
+                              color="gray.300"
+                            >
+                              Loading...
+                            </Text>
                           </Box>
                           <Box>
-                            <Text fontSize="xs" color="gray.300" mb={1}>Efficiency</Text>
-                            <Badge colorScheme="gray" variant="subtle" fontSize="sm">Loading...</Badge>
+                            <Text fontSize="xs" color="gray.300" mb={1}>
+                              Efficiency
+                            </Text>
+                            <Badge
+                              colorScheme="gray"
+                              variant="subtle"
+                              fontSize="sm"
+                            >
+                              Loading...
+                            </Badge>
                           </Box>
                         </SimpleGrid>
                       </Box>
@@ -548,123 +811,167 @@ const MachineStatus: React.FC = () => {
             ) : (
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
                 {filteredData.map((item: any, index: number) => (
-                <Card key={index} variant="elevated" size="sm" borderLeftWidth="6px" borderLeftColor={item.status === 'ON' ? 'green.400' : 'red.400'} rounded="md" boxShadow="md" _hover={{ boxShadow: 'xl', transform: 'translateY(-3px)' }} transition="all 0.2s ease-in-out">
-                  <CardBody p={4} bgGradient={item.status === 'ON' ? 'linear(to-tr, white, green.50)' : 'linear(to-tr, white, red.50)'}>
-                                         {/* Header with Device ID, Status, and Shift */}
-                     <Flex justify="space-between" align="center" mb={3}>
-                       <Text fontSize="lg" fontWeight="bold" color="blue.700">
-                         {item.deviceId}
-                       </Text>
-                       <VStack spacing={1} align="end">
-                         {/* Machine Status ON/OFF with real-time indicator */}
-                         <HStack spacing={2}>
-                           <Box
-                             w={2}
-                             h={2}
-                             borderRadius="full"
-                             bg={item.status === 'ON' ? 'green.400' : 'red.400'}
-                             animation={item.status === 'ON' ? 'pulse 2s infinite' : 'none'}
-                           />
-                           <Badge 
-                             colorScheme={item.status === 'ON' ? 'green' : 'red'}
-                             variant="solid"
-                             size="sm"
-                             borderRadius="full"
-                             px={2}
-                           >
-                             {item.status}
-                           </Badge>
-                         </HStack>
-                         {/* Shift Badge */}
-                         <Badge 
-                           colorScheme={
-                             item.shift === 'Shift-A' ? 'green' : 
-                             item.shift === 'Shift-B' ? 'blue' : 'purple'
-                           }
-                           variant="subtle"
-                           size="sm"
-                         >
-                           {item.shift}
-                         </Badge>
-                       </VStack>
-                     </Flex>
-
-                    {/* Timestamp */}
-                    <Box mb={3}>
-                      <Text fontSize="xs" color="gray.500" mb={1}>
-                        Timestamp
-                      </Text>
-                      <Text fontSize="sm" fontWeight="medium">
-                        {item.timestamp}
-                      </Text>
-                    </Box>
-
-                    {/* Design */}
-                    <Box mb={3}>
-                      <Text fontSize="xs" color="gray.500" mb={1}>
-                        Design
-                      </Text>
-                      <Text fontSize="sm" fontWeight="medium">
-                        {item.design}
-                      </Text>
-                    </Box>
-
-                    {/* Performance Metrics */}
-                    <SimpleGrid columns={2} spacing={3} mb={3}>
-                      <Box>
-                        <Text fontSize="xs" color="gray.500" mb={1}>
-                          Duration
+                  <Card
+                    key={index}
+                    variant="elevated"
+                    size="sm"
+                    borderLeftWidth="6px"
+                    borderLeftColor={
+                      item.status === "ON" ? "green.400" : "red.400"
+                    }
+                    rounded="md"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "xl", transform: "translateY(-3px)" }}
+                    transition="all 0.2s ease-in-out"
+                  >
+                    <CardBody
+                      p={4}
+                      bgGradient={
+                        item.status === "ON"
+                          ? "linear(to-tr, white, green.50)"
+                          : "linear(to-tr, white, red.50)"
+                      }
+                    >
+                      {/* Header with Device ID, Status, and Shift */}
+                      <Flex justify="space-between" align="center" mb={3}>
+                        <Text fontSize="lg" fontWeight="bold" color="blue.700">
+                          {item.deviceId}
                         </Text>
-                        <Text fontSize="lg" fontWeight="bold" color="blue.600">
-                          {item.duration || '0h 0m'}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text fontSize="xs" color="gray.500" mb={1}>
-                          Efficiency
-                        </Text>
-                        <Badge 
-                          colorScheme={item.efficiency >= 4 ? 'green' : item.efficiency >= 3 ? 'yellow' : 'red'}
-                          variant="solid"
-                          fontSize="sm"
-                          rounded="full"
-                          px={2}
-                        >
-                          {parseFloat(item.efficiency || 0).toFixed(2)}
-                        </Badge>
-                      </Box>
-                    </SimpleGrid>
-
-                    {/* Error Metrics */}
-                    <Box>
-                      <Text fontSize="xs" color="gray.500" mb={2}>
-                        Error Status
-                      </Text>
-                      <HStack spacing={2}>
-                        <Box textAlign="center">
-                          <Text fontSize="xs" color="gray.500">Error 1</Text>
-                          <Badge 
-                            colorScheme={item.error1 === 0 ? 'green' : 'red'}
-                            variant="solid"
+                        <VStack spacing={1} align="end">
+                          {/* Machine Status ON/OFF with real-time indicator */}
+                          <HStack spacing={2}>
+                            <Box
+                              w={2}
+                              h={2}
+                              borderRadius="full"
+                              bg={
+                                item.status === "ON" ? "green.400" : "red.400"
+                              }
+                              animation={
+                                item.status === "ON"
+                                  ? "pulse 2s infinite"
+                                  : "none"
+                              }
+                            />
+                            <Badge
+                              colorScheme={
+                                item.status === "ON" ? "green" : "red"
+                              }
+                              variant="solid"
+                              size="sm"
+                              borderRadius="full"
+                              px={2}
+                            >
+                              {item.status}
+                            </Badge>
+                          </HStack>
+                          {/* Shift Badge */}
+                          <Badge
+                            colorScheme={
+                              item.shift === "Shift-A"
+                                ? "green"
+                                : item.shift === "Shift-B"
+                                ? "blue"
+                                : "purple"
+                            }
+                            variant="subtle"
                             size="sm"
                           >
-                            {item.error1}
+                            {item.shift}
                           </Badge>
-                        </Box>
-                        <Box textAlign="center">
-                          <Text fontSize="xs" color="gray.500">Error 2</Text>
-                          <Badge 
-                            colorScheme={item.error2 === 0 ? 'green' : 'red'}
-                            variant="solid"
-                            size="sm"
+                        </VStack>
+                      </Flex>
+
+                      {/* Timestamp */}
+                      <Box mb={3}>
+                        <Text fontSize="xs" color="gray.500" mb={1}>
+                          Timestamp
+                        </Text>
+                        <Text fontSize="sm" fontWeight="medium">
+                          {item.timestamp}
+                        </Text>
+                      </Box>
+
+                      {/* Design */}
+                      <Box mb={3}>
+                        <Text fontSize="xs" color="gray.500" mb={1}>
+                          Design
+                        </Text>
+                        <Text fontSize="sm" fontWeight="medium">
+                          {item.design}
+                        </Text>
+                      </Box>
+
+                      {/* Performance Metrics */}
+                      <SimpleGrid columns={2} spacing={3} mb={3}>
+                        <Box>
+                          <Text fontSize="xs" color="gray.500" mb={1}>
+                            Duration
+                          </Text>
+                          <Text
+                            fontSize="lg"
+                            fontWeight="bold"
+                            color="blue.600"
                           >
-                            {item.error2}
+                            {item.duration || "0h 0m"}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text fontSize="xs" color="gray.500" mb={1}>
+                            Efficiency
+                          </Text>
+                          <Badge
+                            colorScheme={
+                              item.efficiency >= 4
+                                ? "green"
+                                : item.efficiency >= 3
+                                ? "yellow"
+                                : "red"
+                            }
+                            variant="solid"
+                            fontSize="sm"
+                            rounded="full"
+                            px={2}
+                          >
+                            {parseFloat(item.efficiency || 0).toFixed(2)}
                           </Badge>
                         </Box>
-                      </HStack>
-                    </Box>
-                  </CardBody>
-                </Card>
+                      </SimpleGrid>
+
+                      {/* Error Metrics */}
+                      <Box>
+                        <Text fontSize="xs" color="gray.500" mb={2}>
+                          Error Status
+                        </Text>
+                        <HStack spacing={2}>
+                          <Box textAlign="center">
+                            <Text fontSize="xs" color="gray.500">
+                              Error 1
+                            </Text>
+                            <Badge
+                              colorScheme={item.error1 === 0 ? "green" : "red"}
+                              variant="solid"
+                              size="sm"
+                            >
+                              {item.error1}
+                            </Badge>
+                          </Box>
+                          <Box textAlign="center">
+                            <Text fontSize="xs" color="gray.500">
+                              Error 2
+                            </Text>
+                            <Badge
+                              colorScheme={item.error2 === 0 ? "green" : "red"}
+                              variant="solid"
+                              size="sm"
+                            >
+                              {item.error2}
+                            </Badge>
+                          </Box>
+                        </HStack>
+                      </Box>
+                    </CardBody>
+                  </Card>
                 ))}
               </SimpleGrid>
             )}
