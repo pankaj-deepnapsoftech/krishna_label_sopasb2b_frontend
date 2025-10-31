@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useCookies } from 'react-cookie';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useCookies } from "react-cookie";
+import io, { Socket } from "socket.io-client";
 import {
   Box,
   Text,
@@ -19,93 +20,188 @@ import {
   StatHelpText,
   StatArrow,
   SimpleGrid,
-} from '@chakra-ui/react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+} from "@chakra-ui/react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   LineChart,
-  Line
-} from 'recharts';
-import { 
-  Activity
-} from 'lucide-react';
+  Line,
+} from "recharts";
+import { Activity } from "lucide-react";
 
 const MachineStatus: React.FC = () => {
   const [cookies] = useCookies();
   const toast = useToast();
   const [machineData, setMachineData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedMachine, setSelectedMachine] = useState<string>('all');
-  const [selectedShift, setSelectedShift] = useState<string>('all');
-  const [selectedDesign, setSelectedDesign] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedMachine, setSelectedMachine] = useState<string>("all");
+  const [selectedShift, setSelectedShift] = useState<string>("all");
+  const [selectedDesign, setSelectedDesign] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   // const [timeRange, setTimeRange] = useState<string>('1h');
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-    const [autoRefresh, setAutoRefresh] = useState<boolean>(false);
+  const [autoRefresh, setAutoRefresh] = useState<boolean>(false);
   const [refreshInterval, setRefreshInterval] = useState<number>(30); // seconds
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8096/api/';
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8096/api/";
+  const MACHINE_STATUS_POST_URL = `${backendUrl}machine-status/save-machine-status`;
+  const MACHINE_STATUS_GET_URL = `${backendUrl}machine-status/get-all-machine-status`;
 
-  const fetchMachineData = useCallback(async (deviceId: string = 'PC-001') => {
-    setIsLoading(true);
+  // Socket ref for real-time updates
+  const socketRef = useRef<Socket | null>(null);
+
+  // POST function to save machine status to database
+  const postMachineStatus = async (data: any) => {
     try {
-      // Use default device if 'all' is selected
-      const actualDeviceId = deviceId === 'all' ? 'PC-001' : deviceId;
-      
-      // Use the machine-data API endpoint
-      const response = await fetch(`${backendUrl}dashboard/machine-data?device_id=${actualDeviceId}`, {
+      const response = await fetch(MACHINE_STATUS_POST_URL, {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${cookies?.access_token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies?.access_token || ""}`,
         },
+        credentials: "include",
+        body: JSON.stringify(data),
       });
-      
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          // Transform the API response to match our card structure
-          const transformedData = transformMachineData(result.data);
-          setMachineData(transformedData);
-          setApiSummaryData(result.data); // Store complete API data for summary
-          setLastUpdated(new Date());
-          toast({
-            title: "Success",
-            description: "Machine data fetched successfully",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-          });
-        } else {
-          throw new Error(result.message || "Failed to fetch machine data");
-        }
-      } else {
-        throw new Error('Failed to fetch machine data');
+
+      if (!response.ok) {
+        throw new Error("Failed to save machine status");
       }
-    } catch (error: any) {
-      console.error('Error fetching machine data:', error);
+
+      const result = await response.json();
+      console.log("Machine status saved successfully:", result);
+
+      return result;
+    } catch (err) {
+      console.warn("Failed to save machine status", err);
       toast({
         title: "Error",
-        description: "Failed to fetch machine data. Using sample data.",
-        status: "warning",
+        description: "Failed to save machine status. Please try again.",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
-      // Keep using mock data on error
-    } finally {
-      setIsLoading(false);
     }
-  }, [cookies?.access_token, toast]);
+  };
+
+  const fetchMachineData = useCallback(
+    async (deviceId: string = "PC-001") => {
+      setIsLoading(true);
+      try {
+        // Use default device if 'all' is selected
+        const actualDeviceId = deviceId === "all" ? "PC-001" : deviceId;
+
+        // Use the machine-data API endpoint
+        const response = await fetch(
+          `${backendUrl}dashboard/machine-data?device_id=${actualDeviceId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies?.access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            // Transform the API response to match our card structure
+            const transformedData = transformMachineData(result.data);
+            setMachineData(transformedData);
+            setApiSummaryData(result.data); // Store complete API data for summary
+            setLastUpdated(new Date());
+            toast({
+              title: "Success",
+              description: "Machine data fetched successfully",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
+          } else {
+            throw new Error(result.message || "Failed to fetch machine data");
+          }
+        } else {
+          throw new Error("Failed to fetch machine data");
+        }
+      } catch (error: any) {
+        console.error("Error fetching machine data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch machine data. Using sample data.",
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
+        // Keep using mock data on error
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cookies?.access_token, toast]
+  );
 
   useEffect(() => {
     // Load machine data from API
     fetchMachineData(selectedMachine);
   }, [selectedMachine, fetchMachineData]);
+
+  // Socket.IO connection for real-time updates
+  useEffect(() => {
+    // Initialize Socket.IO client
+    const socketUrl =
+      process.env.REACT_APP_SOCKET_URL ||
+      (process.env.REACT_APP_BACKEND_URL || "").replace(/\/api\/?$/, "") ||
+      "http://localhost:8085";
+
+    socketRef.current = io(socketUrl, {
+      withCredentials: true,
+      extraHeaders: {
+        Authorization: `Bearer ${cookies?.access_token || ""}`,
+      },
+    });
+
+    // Join the 'machineStatusDashboard' room
+    socketRef.current.emit("joinMachineStatusDashboard");
+    console.log("Joined machineStatusDashboard room");
+
+    // Handle machine status updates from backend
+    socketRef.current.on("machineStatusUpdate", (data: any) => {
+      console.log("Received machine status update:", data);
+
+      // Add new data to the list
+      setMachineData((prevData) => {
+        const newData = {
+          deviceId: data.deviceId || "PC-001",
+          timestamp: new Date(
+            data.createdAt || data.startTime
+          ).toLocaleString(),
+          shift: data.shift || "Shift-A",
+          design: data.design || "Design123",
+          count: data.count || 0,
+          efficiency: parseFloat(data.efficiency || 0).toFixed(2),
+          error1: data.error1 || 0,
+          error2: data.error2 || 0,
+          status: data.status || "OFF",
+          duration: data.duration || "0h 0m",
+        };
+
+        return [newData, ...prevData].slice(0, 100); // Keep last 100 entries
+      });
+
+      setLastUpdated(new Date());
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, [cookies?.access_token]);
 
   // Auto-refresh functionality
   useEffect(() => {
@@ -122,18 +218,18 @@ const MachineStatus: React.FC = () => {
   // Transform API data to match our card structure
   const transformMachineData = (apiData: any) => {
     if (!apiData.complete_status_timeline) return [];
-    
+
     return apiData.complete_status_timeline.map((item: any, index: number) => ({
-      deviceId: apiData.device_id || 'PC-001',
+      deviceId: apiData.device_id || "PC-001",
       timestamp: item.start_time,
-      shift: item.shift || 'Shift-A',
-      design: item.design || 'Design123',
+      shift: item.shift || "Shift-A",
+      design: item.design || "Design123",
       count: item.count || 0,
       efficiency: parseFloat(item.efficiency || 0).toFixed(2),
       error1: item.error1 || 0,
       error2: item.error2 || 0,
-      status: item.status || 'OFF',
-      duration: item.duration || '0h 0m'
+      status: item.status || "OFF",
+      duration: item.duration || "0h 0m",
     }));
   };
 
@@ -141,27 +237,35 @@ const MachineStatus: React.FC = () => {
   const [apiSummaryData, setApiSummaryData] = useState<any>(null);
 
   // Filter data based on selections
-  const filteredData = machineData.filter(item => {
-    if (selectedMachine !== 'all' && item.deviceId !== selectedMachine) return false;
-    if (selectedShift !== 'all' && item.shift !== selectedShift) return false;
-    if (selectedDesign !== 'all' && item.design !== selectedDesign) return false;
-    if (selectedStatus !== 'all' && item.status !== selectedStatus) return false;
+  const filteredData = machineData.filter((item) => {
+    if (selectedMachine !== "all" && item.deviceId !== selectedMachine)
+      return false;
+    if (selectedShift !== "all" && item.shift !== selectedShift) return false;
+    if (selectedDesign !== "all" && item.design !== selectedDesign)
+      return false;
+    if (selectedStatus !== "all" && item.status !== selectedStatus)
+      return false;
     return true;
   });
 
-
   // Prepare chart data
   const chartData = filteredData.map((item: any) => ({
-    time: item.timestamp.split(' ')[1], // Extract time part
+    time: item.timestamp.split(" ")[1], // Extract time part
     count: item.count,
     efficiency: item.efficiency,
-    errors: item.error1 + item.error2
+    errors: item.error1 + item.error2,
   }));
 
   // Get unique values for filters
-  const shifts = Array.from(new Set(machineData.map((item: any) => item.shift)));
-  const designs = apiSummaryData?.designs || Array.from(new Set(machineData.map((item: any) => item.design)));
-  const availableDevices = Array.from(new Set(machineData.map((item: any) => item.deviceId)));
+  const shifts = Array.from(
+    new Set(machineData.map((item: any) => item.shift))
+  );
+  const designs =
+    apiSummaryData?.designs ||
+    Array.from(new Set(machineData.map((item: any) => item.design)));
+  const availableDevices = Array.from(
+    new Set(machineData.map((item: any) => item.deviceId))
+  );
 
   return (
     <Box p={6} bg="gray.50" minH="100vh">
@@ -224,6 +328,41 @@ const MachineStatus: React.FC = () => {
               size="sm"
             >
               Refresh Now
+            </Button>
+            <Button
+              colorScheme="green"
+              onClick={() => {
+                // Send test machine status data
+                const testData = {
+                  deviceId: "PC-001",
+                  status: "ON",
+                  shift: "Shift-A",
+                  design: "Design123",
+                  count: Math.floor(Math.random() * 100),
+                  efficiency: (Math.random() * 5).toFixed(2),
+                  error1: Math.floor(Math.random() * 5),
+                  error2: Math.floor(Math.random() * 3),
+                  duration: `${Math.floor(Math.random() * 8)}h ${Math.floor(
+                    Math.random() * 60
+                  )}m`,
+                  temperature: 25 + Math.floor(Math.random() * 10),
+                  vibration: Math.random() * 10,
+                  powerConsumption: 100 + Math.random() * 50,
+                };
+
+                postMachineStatus(testData);
+
+                toast({
+                  title: "Test Data Sent",
+                  description: "Machine status test data sent to database",
+                  status: "info",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              }}
+              size="sm"
+            >
+              Send Test Data
             </Button>
           </HStack>
         </Flex>
@@ -656,8 +795,7 @@ const MachineStatus: React.FC = () => {
         </Card>
 
         {/* Charts */}
-        <HStack spacing={6} align="stretch">
-          {/* Count Chart */}
+        {/* <HStack spacing={6} align="stretch">
           <Card flex="2">
             <CardBody>
               <Heading size="md" mb={4}>
@@ -706,7 +844,6 @@ const MachineStatus: React.FC = () => {
             </CardBody>
           </Card>
 
-          {/* Efficiency Chart */}
           <Card flex="1">
             <CardBody>
               <Heading size="md" mb={4}>
@@ -731,7 +868,7 @@ const MachineStatus: React.FC = () => {
               </Box>
             </CardBody>
           </Card>
-        </HStack>
+        </HStack> */}
 
         {/* Machine Performance Data Cards */}
         <Card>
@@ -983,4 +1120,3 @@ const MachineStatus: React.FC = () => {
 };
 
 export default MachineStatus;
-  
